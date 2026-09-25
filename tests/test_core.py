@@ -1,10 +1,10 @@
 """Unit tests for the pure-logic parts (no webcam or model needed)."""
 import numpy as np
 
-from ai_mouse.hand import Hand
-from ai_mouse.smoothing import OneEuroFilter
-from ai_mouse.toolbar import Toolbar
-from ai_mouse.modes import MouseMode, WhiteboardMode
+from airtouch.hand import Hand
+from airtouch.smoothing import OneEuroFilter
+from airtouch.toolbar import Toolbar
+from airtouch.modes import MouseMode, WhiteboardMode
 from config import Config
 
 

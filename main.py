@@ -1,4 +1,4 @@
-"""AI-Mouse: gesture-controlled virtual mouse and air whiteboard.
+"""AirTouch: gesture-controlled virtual mouse and air whiteboard.
 
 Run:
     python main.py                    # start in virtual-mouse mode
@@ -16,14 +16,14 @@ import time
 
 import cv2
 
-from ai_mouse.hand_tracking import HandTracker
-from ai_mouse.hud import render as render_hud
-from ai_mouse.modes import MouseMode, WhiteboardMode
+from airtouch.hand_tracking import HandTracker
+from airtouch.hud import render as render_hud
+from airtouch.modes import MouseMode, WhiteboardMode
 from config import Config
 
 
 def parse_args():
-    p = argparse.ArgumentParser(description="AI-Mouse gesture control")
+    p = argparse.ArgumentParser(description="AirTouch gesture control")
     p.add_argument("--camera", type=int, default=None, help="camera index")
     p.add_argument("--width", type=int, default=None, help="capture width")
     p.add_argument("--height", type=int, default=None, help="capture height")
@@ -52,7 +52,7 @@ def main():
     modes = [MouseMode(cfg), WhiteboardMode(cfg)]
     idx = 0 if args.mode == "mouse" else 1
 
-    window = "AI-Mouse"
+    window = "AirTouch"
     cv2.namedWindow(window, cv2.WINDOW_NORMAL)
     cv2.resizeWindow(window, cfg.frame_width, cfg.frame_height)
 
@@ -60,7 +60,7 @@ def main():
     prev_t = time.monotonic()
     fps = 0.0
 
-    print("AI-Mouse running.  TAB=switch  SPACE=pause  Q=quit")
+    print("AirTouch running.  TAB=switch  SPACE=pause  Q=quit")
     try:
         while True:
             ok, frame = cam.read()
@@ -105,7 +105,7 @@ def main():
         cam.release()
         tracker.close()
         cv2.destroyAllWindows()
-        print("AI-Mouse stopped")
+        print("AirTouch stopped")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-"""Central configuration for the AI-Mouse gesture-control suite.
+"""Central configuration for the AirTouch gesture-control suite.
 
 Every tunable number lives here so behavior can be adjusted without
 touching the logic. All gesture thresholds are ratios relative to the
