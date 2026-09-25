@@ -1,125 +1,114 @@
-# AI-Mouse
+<p align="center">
+  <img src="docs/banner.png" alt="AirTouch: touch your computer without touching it" width="100%">
+</p>
 
-Control your computer with hand gestures through your webcam — a **virtual mouse**
-and an **air whiteboard**, both driven by a shared real-time hand-tracking engine.
+<p align="center">
+  <b>Control your mouse and write on a virtual whiteboard with nothing but your hand and a webcam.</b><br>
+  Real-time hand tracking &nbsp;·&nbsp; ~30 FPS on CPU &nbsp;·&nbsp; no special hardware
+</p>
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![OpenCV](https://img.shields.io/badge/OpenCV-green)
-![MediaPipe](https://img.shields.io/badge/MediaPipe-Hands-orange)
-![CI](https://github.com/younespuri/AI-Mouse/actions/workflows/ci.yml/badge.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+<p align="center">
+  <a href="https://github.com/younespuri/AirTouch/actions/workflows/ci.yml"><img src="https://github.com/younespuri/AirTouch/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/python-3.12%2B-3776AB" alt="Python 3.12+">
+  <img src="https://img.shields.io/badge/MediaPipe-hand%20tracking-FF6F00" alt="MediaPipe">
+  <img src="https://img.shields.io/badge/OpenCV-real--time-5C3EE8" alt="OpenCV">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow" alt="MIT License"></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick start</a> &nbsp;·&nbsp;
+  <a href="#gestures">Gestures</a> &nbsp;·&nbsp;
+  <a href="#how-it-works">How it works</a> &nbsp;·&nbsp;
+  <a href="#roadmap">Roadmap</a>
+</p>
 
 <!-- Demo: record ~10s of writing, erasing and cursor control, save it as
      docs/demo.gif, then replace this comment with:  ![demo](docs/demo.gif) -->
 
-## Highlights
+## Why AirTouch?
 
-- **Virtual mouse** — move, left click, right click, click-and-drag, and scroll with one hand.
-- **Air whiteboard** — write with one finger, erase with an open hand, and use an on-screen toolbar (colors, brush size, undo, clear, save) driven by hovering. Full undo history.
-- **Jitter-free pointing** — cursor coordinates run through a [One Euro Filter](https://gery.casiez.net/1euro/), the same technique used in professional motion tracking, for smoothing without lag.
-- **Scale-invariant gestures** — every threshold is normalized to the detected hand size, so gestures work at different distances from the camera.
-- **Modular architecture** — a shared tracking engine plus swappable interaction modes; adding a new mode is one small class. Pure logic is split from the camera/ML layer and covered by a unit-test suite that runs in CI.
+- **Two tools, one hand.** A virtual mouse and an air whiteboard, one `TAB` apart.
+- **No special hardware.** Just the webcam you already have.
+- **Feels smooth.** A [One Euro filter](https://gery.casiez.net/1euro/) removes hand tremor without adding lag.
+- **Works at any distance.** Every gesture is measured relative to your hand size.
+- **Built to last.** Modular, unit-tested with CI, and a new mode is one small class.
+
+## Quick start
+
+```bash
+git clone https://github.com/younespuri/AirTouch.git
+cd AirTouch
+pip install -r requirements.txt
+python download_model.py    # one-time, ~7.5 MB hand model
+python main.py
+```
+
+Raise one finger and write in the air. Open your hand to erase. Press `TAB` to take over your mouse.
+
+> **Tip:** press `B` to dim the camera so your writing glows, and `SPACE` to pause at any time.
+
+Options: `python main.py --mode mouse` starts in mouse mode, `--camera 1` picks another webcam.
+Tested on Windows 11 with a standard laptop webcam.
 
 ## Gestures
 
-### Virtual Mouse
-| Gesture | Action |
-| --- | --- |
-| Index finger up | Move cursor |
-| Index + middle up (a "V"), move hand up/down | Scroll |
-| Thumb + index pinch | Left click (tap) / drag (hold and move) |
-| Thumb + middle pinch | Right click |
-| Relaxed hand | Idle (no action) |
-
-### Air Whiteboard
-| Gesture / Key | Action |
+### Air whiteboard
+| Gesture / key | Action |
 | --- | --- |
 | Index finger up | Write |
-| Open hand (all fingers up) | Erase |
+| Open hand | Erase |
 | Two fingers up | Move without drawing |
-| Hover a toolbar button (top bar) | Pick color / brush size / undo / clear / save |
-| `C` | Clear the whole canvas |
-| `Z` | Undo the last stroke |
-| `B` | Dim the camera background so strokes stand out |
-| `S` | Save the drawing to `outputs/` |
-| `[` / `]` | Decrease / increase pen thickness |
-| `N` | Cycle pen color |
+| Hover a button on the top bar | Pick color / brush size / undo / clear / save |
+| `Z` / `C` / `S` | Undo / clear / save to `outputs/` |
+| `B` | Dim the camera so strokes stand out |
+| `N` / `[` `]` | Next color / thinner, thicker pen |
 
-### Global keys
+### Virtual mouse
+| Gesture | Action |
+| --- | --- |
+| Index finger up | Move the cursor |
+| Thumb + index pinch | Click (tap) or drag (hold and move) |
+| Thumb + middle pinch | Right click |
+| Two fingers up, move up/down | Scroll |
+| Relaxed hand | Idle |
+
+### Anywhere
 | Key | Action |
 | --- | --- |
 | `TAB` | Switch mode |
-| `SPACE` | Pause / resume control |
+| `SPACE` | Pause / resume |
 | `Q` or `ESC` | Quit |
-
-## Installation
-
-```bash
-git clone https://github.com/younespuri/AI-Mouse.git
-cd AI-Mouse
-
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS / Linux
-source .venv/bin/activate
-
-pip install -r requirements.txt
-
-# fetch the hand-tracking model (~7.5 MB, not stored in the repo)
-python download_model.py
-```
-
-## Usage
-
-```bash
-python main.py                 # air whiteboard (default)
-python main.py --mode mouse    # virtual-mouse mode
-python main.py --camera 1      # pick another webcam
-```
-
-Press `SPACE` to pause any time the cursor gets away from you, and `Q` to quit.
 
 ## How it works
 
-1. **MediaPipe HandLandmarker** (Tasks API, video mode) detects 21 landmarks per frame from the webcam.
-2. `ai_mouse/hand_tracking.py` wraps those landmarks with geometry helpers — finger states and pinch ratios — all normalized by palm size, so gestures stay robust as you move closer or farther.
-3. Each mode in `ai_mouse/modes.py` maps gestures to actions. The virtual mouse maps an *active region* of the frame onto the full screen and drives the OS cursor through **PyAutoGUI**.
-4. Cursor coordinates pass through a **One Euro Filter** (`ai_mouse/smoothing.py`) that removes hand tremor while keeping fast motion responsive.
-
-## Project structure
+1. **MediaPipe HandLandmarker** (Tasks API, video mode) finds 21 hand landmarks in every frame, on a downscaled copy for speed.
+2. `airtouch/hand.py` turns landmarks into gestures: which fingers are up and how close fingertips are, all normalized by palm size, so gestures stay stable as you move closer or farther.
+3. Each mode in `airtouch/modes.py` maps gestures to actions. The virtual mouse maps an *active region* of the frame onto your whole screen and drives the real cursor through **PyAutoGUI**.
+4. The cursor passes through a **One Euro filter** (`airtouch/smoothing.py`) that stays calm when your hand is still and responsive when it moves fast.
 
 ```
-AI-Mouse/
-├── main.py                 # entry point: capture loop + mode switching
-├── download_model.py       # fetches the hand-landmarker model
-├── config.py               # every tunable parameter in one place
-├── ai_mouse/
-│   ├── hand.py             # pure hand geometry (no camera/ML deps)
-│   ├── hand_tracking.py    # MediaPipe HandLandmarker wrapper
-│   ├── smoothing.py        # One Euro Filter
-│   ├── modes.py            # MouseMode, WhiteboardMode
-│   ├── toolbar.py          # on-screen whiteboard toolbar
-│   └── hud.py              # on-screen overlay
-├── tests/                  # unit tests (pytest)
-├── .github/workflows/      # continuous integration
-├── requirements.txt
-└── README.md
+AirTouch/
+├── main.py               # capture loop + mode switching
+├── config.py             # every tunable parameter in one place
+├── download_model.py     # fetches the hand model
+├── airtouch/
+│   ├── hand.py           # pure hand geometry (no camera/ML deps)
+│   ├── hand_tracking.py  # MediaPipe HandLandmarker wrapper
+│   ├── modes.py          # MouseMode, WhiteboardMode
+│   ├── smoothing.py      # One Euro filter
+│   ├── toolbar.py        # on-screen whiteboard toolbar
+│   └── hud.py            # on-screen overlay
+└── tests/                # pytest suite, runs in CI
 ```
 
 ## Tuning
 
-All thresholds live in [`config.py`](config.py). If a gesture triggers too easily
-or not enough, adjust the matching `*_ratio` (lower = harder to trigger). Cursor
-feel is controlled by `min_cutoff` and `beta` of the One Euro Filter.
+Everything lives in [`config.py`](config.py):
 
-**Performance:** detection runs on a downscaled copy of each frame (`detection_width`,
-default 640 px) while the display stays full resolution. Lower it for more speed on
-weak hardware, or set it to `0` to detect at full resolution.
-
-**Writing feel:** `pen_smoothing` sets how many recent points are averaged for the pen
-(higher = smoother but slightly laggier). `bg_dim` sets how dark the camera goes when you
-press `B`.
+- **Gestures too eager or too stubborn?** Adjust the matching `*_ratio` (lower = harder to trigger).
+- **Handwriting shaky?** Raise `pen_smoothing` (more points averaged = smoother, slightly more lag).
+- **Slow machine?** Lower `detection_width`; the display stays full resolution.
+- **Cursor feel:** `min_cutoff` and `beta` tune the One Euro filter.
 
 ## Tests
 
@@ -128,16 +117,21 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-The suite covers the smoothing filter, hand geometry, the toolbar, and the
-whiteboard's write / erase / undo logic — no webcam or model download needed.
-It runs automatically on every push via GitHub Actions.
+Covers the smoothing filter, hand geometry, the toolbar, whiteboard write / erase / undo, and every
+mouse gesture (against a fake mouse). No webcam or model download needed.
 
 ## Roadmap
 
-- [ ] Two-hand support
-- [ ] User-recorded custom gestures
-- [ ] Shape/stroke recognition in the whiteboard
+- [ ] Two-hand gestures (zoom, rotate)
+- [ ] Record your own custom gestures
+- [ ] Shape snapping on the whiteboard (straight lines, circles)
+- [ ] Export the whiteboard as a transparent PNG or a video
+- [ ] Verified macOS and Linux support
+
+Ideas, bug reports and pull requests are welcome; the roadmap is a good place to start.
 
 ## License
 
-Released under the [MIT License](LICENSE).
+[MIT](LICENSE)
+
+<p align="center"><sub>If AirTouch made you smile, a star helps other people find it.</sub></p>

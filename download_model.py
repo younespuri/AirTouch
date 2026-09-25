@@ -1,4 +1,4 @@
-"""Download the MediaPipe hand-landmarker model used by AI-Mouse.
+"""Download the MediaPipe hand-landmarker model used by AirTouch.
 
 The model file (~7.5 MB) is not stored in the repository. Run this once
 before the first launch:
