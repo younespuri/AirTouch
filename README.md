@@ -128,7 +128,7 @@ mouse gesture (against a fake mouse). No webcam or model download needed.
 - [ ] Export the whiteboard as a transparent PNG or a video
 - [ ] Verified macOS and Linux support
 
-Ideas, bug reports and pull requests are welcome; the roadmap is a good place to start.
+Ideas, bug reports and pull requests are welcome; the roadmap is a good place to start. See [CONTRIBUTING.md](CONTRIBUTING.md) to get set up.
 
 ## License
 
