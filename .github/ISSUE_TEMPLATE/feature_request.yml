@@ -1,0 +1,20 @@
+name: Feature request
+description: Suggest a gesture, mode or improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like AirTouch to do?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it useful?
+      description: The problem it solves or the use case you have in mind.
+  - type: textarea
+    id: gesture
+    attributes:
+      label: Suggested gesture (if any)
+      placeholder: e.g. pinch with two hands to zoom
